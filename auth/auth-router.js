@@ -14,8 +14,8 @@ router.post('/register', (req, res) => {
 
   Users.add(user)
     .then(saved => {
-      const token = genToken(saved);
-      res.status(201).json({ created_user: saved, token: token });
+      // const token = genToken(saved);
+      res.status(201).json({ created_user: saved });
     })
     .catch(error => {
       res.status(500).json(error);
@@ -51,7 +51,7 @@ function genToken(user) {
     username: user.username,
     role: user.role || 'user'
   };
-  
+
   const options = { expiresIn: '1h' };
   const token = jwt.sign(payload, jwtSecret, options);
 

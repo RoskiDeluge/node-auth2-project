@@ -2,7 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 
 const authRouter = require('../auth/auth-router.js');
 const usersRouter = require('../users/users-router.js');
@@ -15,7 +15,7 @@ server.use(express.json());
 server.use(cors());
 
 server.use('/api/auth', authRouter);
-server.use('/api/users', restricted, checkRole("hr"), usersRouter);
+server.use('/api/users', restricted, checkRole("user"), usersRouter);
 
 server.get('/', (req, res) => {
   res.send("Server is up");
@@ -45,9 +45,9 @@ module.exports = server;
 function checkRole(role) {
   return (req, res, next) => {
     if(
-      req.decodedToken && 
-      req.decodedToken.role && 
-      req.decodedToken.role.toLowerCase() === role
+      req.decodedJwt && 
+      req.decodedJwt.role && 
+      req.decodedJwt.role.toLowerCase() === role
       ) {
       next();
     } else {
